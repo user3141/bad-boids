@@ -6,6 +6,7 @@ for use as an exercise on refactoring.
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import random
+import numpy as np
 
 
 # parameters
@@ -13,13 +14,13 @@ num_boids = 50
 neighbor_dist_cutoff = 100
 neighbor_vel_dist_cutoff = 10000
 center_damping = 0.01
-vel_damping = 0.125
+vel_matching_strength = 0.125
 
 # initialisation
-boids_x = [random.uniform(-450, 50.0) for x in range(num_boids)]
-boids_y = [random.uniform(300.0, 600.0) for x in range(num_boids)]
-boid_x_velocities = [random.uniform(0, 10.0) for x in range(num_boids)]
-boid_y_velocities = [random.uniform(-20.0, 20.0) for x in range(num_boids)]
+boids_x = np.array([random.uniform(-450, 50.0) for x in range(num_boids)])
+boids_y = np.array([random.uniform(300.0, 600.0) for x in range(num_boids)])
+boid_x_velocities = np.array([random.uniform(0, 10.0) for x in range(num_boids)])
+boid_y_velocities = np.array([random.uniform(-20.0, 20.0) for x in range(num_boids)])
 boids = (boids_x, boids_y, boid_x_velocities, boid_y_velocities)
 
 
@@ -45,8 +46,8 @@ def adapt_speed(xs, ys, xvs, yvs, neighbor_vel_dist_cutoff):
     for i in range(len(xs)):
         for j in range(len(xs)):
             if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < neighbor_vel_dist_cutoff:
-                xvs[i] = xvs[i] + (xvs[j] - xvs[i]) * vel_damping / len(xs)
-                yvs[i] = yvs[i] + (yvs[j] - yvs[i]) * vel_damping / len(xs)
+                xvs[i] = xvs[i] + (xvs[j] - xvs[i]) * vel_matching_strength / len(xs)
+                yvs[i] = yvs[i] + (yvs[j] - yvs[i]) * vel_matching_strength / len(xs)
 
 
 def update_boids(boids):
