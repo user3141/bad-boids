@@ -31,10 +31,6 @@ def fly_towards_centre(boids_pos, boids_vel, center_damping):
 
         new_boids_vel.append(boid_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
-    #for i in range(len(xs)):
-    #    for j in range(len(xs)):
-    #        xvs[i] = xvs[i] + (xs[j] - xs[i]) * center_damping / len(xs)
-    #        yvs[i] = yvs[i] + (ys[j] - ys[i]) * center_damping / len(xs)
 
 
 def distance(vec1, vec2):
@@ -53,11 +49,6 @@ def avoid_nearby_boids(boids_pos, boids_vel, neighbor_dist_cutoff):
 
         new_boids_vel.append(boid_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
-    #for i in range(len(xs)):
-    #    for j in range(len(xs)):
-    #        if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < neighbor_dist_cutoff:
-    #            xvs[i] = xvs[i] + (xs[i] - xs[j])
-    #            yvs[i] = yvs[i] + (ys[i] - ys[j])
 
 
 def match_speed(boids_pos, boids_vel, neighbor_vel_dist_cutoff):
@@ -70,11 +61,6 @@ def match_speed(boids_pos, boids_vel, neighbor_vel_dist_cutoff):
 
         new_boids_vel.append(boid1_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
-    #for i in range(len(xs)):
-    #    for j in range(len(xs)):
-    #        if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < neighbor_vel_dist_cutoff:
-    #            xvs[i] = xvs[i] + (xvs[j] - xvs[i]) * vel_matching_strength / len(xs)
-    #            yvs[i] = yvs[i] + (yvs[j] - yvs[i]) * vel_matching_strength / len(xs)
 
 
 def update_boids(boids):
