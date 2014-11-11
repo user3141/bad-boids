@@ -27,8 +27,8 @@ def fly_towards_centre(boids_pos, boids_vel, attraction_const):
     new_boids_vel = []
     for boid1_pos, boid_vel in zip(boids_pos, boids_vel):
         for boid2_pos in boids_pos:
-            boid_vel += (boid2_pos - boid1_pos) * attraction_const / len(boids_pos)
-
+            boid_vel = boid_vel + (boid2_pos - boid1_pos) * attraction_const / len(boids_pos)
+            #boid_vel += (boid2_pos - boid1_pos) * attraction_const / len(boids_pos)
         new_boids_vel.append(boid_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
     return boids_vel
