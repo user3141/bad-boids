@@ -14,8 +14,10 @@ def test_bad_boids_regression():
         return boid_data
 
     regression_data = yaml.load(open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
-    boid_data_before = convert_data(regression_data["before"])
-    boid_data_after = convert_data(regression_data["after"])
+    #boid_data_before = convert_data(regression_data["before"])
+    #boid_data_after = convert_data(regression_data["after"])
+    boid_data_before = regression_data["before"]
+    boid_data_after = regression_data["after"]
 
     update_boids(boid_data_before)
     for list_after, list_before in zip(boid_data_after, boid_data_before):
