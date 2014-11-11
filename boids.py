@@ -13,7 +13,7 @@ import numpy as np
 num_boids = 50
 neighbor_dist_cutoff = 100
 neighbor_vel_dist_cutoff = 10000
-center_damping = 0.01
+attraction_const = 0.01
 vel_matching_strength = 0.125
 
 # initialisation
@@ -22,15 +22,16 @@ boids_vel = [np.array([random.uniform(   0, 10.0), random.uniform(-20.0,  20.0)]
 boids = (boids_pos, boids_vel)
 
 
-def fly_towards_centre(boids_pos, boids_vel, center_damping):
+def fly_towards_centre(boids_pos, boids_vel, attraction_const):
     """Boids fly towards the center of all other boids."""
     new_boids_vel = []
     for boid1_pos, boid_vel in zip(boids_pos, boids_vel):
         for boid2_pos in boids_pos:
-            boid_vel += (boid2_pos - boid1_pos) * center_damping / len(boids_pos)
+            boid_vel += (boid2_pos - boid1_pos) * attraction_const / len(boids_pos)
 
         new_boids_vel.append(boid_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
+    return boids_vel
 
 
 def distance(vec1, vec2):
@@ -49,6 +50,7 @@ def avoid_nearby_boids(boids_pos, boids_vel, neighbor_dist_cutoff):
 
         new_boids_vel.append(boid_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
+    return boids_vel
 
 
 def match_speed(boids_pos, boids_vel, neighbor_vel_dist_cutoff):
@@ -61,11 +63,12 @@ def match_speed(boids_pos, boids_vel, neighbor_vel_dist_cutoff):
 
         new_boids_vel.append(boid1_vel)
     boids_vel[0:] = [new_boid_vel for new_boid_vel in new_boids_vel]
+    return boids_vel
 
 
 def update_boids(boids):
     boids_pos, boids_vel = boids
-    fly_towards_centre(boids_pos, boids_vel, center_damping)
+    fly_towards_centre(boids_pos, boids_vel, attraction_const)
     avoid_nearby_boids(boids_pos, boids_vel, neighbor_dist_cutoff)
     match_speed(boids_pos, boids_vel, neighbor_vel_dist_cutoff)
 
