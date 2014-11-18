@@ -33,18 +33,30 @@ def test_bad_boids_initialisation():
 
 def test_boid_interaction_fly_to_middle():
     boids = bd.Boids(3.0, 2.0, 10, 0)
-    first = bd.Starling(0, 0, 1, 0, boids)
+    first  = bd.Starling(0, 0, 1, 0, boids)
     second = bd.Starling(0, 5, 0, 0, boids)
     assert_array_equal(first.interaction(second), [0.0, 15.0])
 
 def test_boid_interaction_avoidance():
     boids = bd.Boids(3.0, 10.0, 10, 0)
-    first = bd.Starling(0, 0, 1, 0, boids)
+    first  = bd.Starling(0, 0, 1, 0, boids)
     second = bd.Starling(0, 5, 0, 0, boids)
     assert_array_equal(first.interaction(second), [0.0, 10.0])
 
 def test_boid_interaction_formation():
     boids = bd.Boids(3.0, 2.0, 10.0, 7.0)
-    first = bd.Starling(0, 0, 0.0, 0, boids)
+    first  = bd.Starling(0, 0,  0.0, 0, boids)
     second = bd.Starling(0, 5, 11.0, 0, boids)
     assert_array_equal(first.interaction(second), [11.0*7.0, 15.0])
+
+def test_starling_flees_the_eagle():
+    boids = bd.Boids(3.0, 2.0, 10.0, 7.0)
+    first  = bd.Starling(0, 0, 0.0, 0, boids)
+    second = bd.Eagle(0, 5, 0.0, 0, boids)
+    assert_array_equal(first.interaction(second), [0.0, -5.*5000/5**2])
+
+def test_eagle_hunts_startling():
+    boids = bd.Boids(3.0, 2.0, 10.0, 7.0)
+    first  = bd.Eagle(0, 0, 0.0, 0, boids)
+    second = bd.Starling(0, 5, 0.0, 0, boids)
+    assert_array_equal(first.interaction(second), [0.0, 5.*boids.eagle_hunt_strength])
