@@ -67,35 +67,15 @@ class Eagle(Boid):
 
 # Deliberately terrible code for teaching purposes
 class Boids(object):
-    def __init__(self, 
-                 flock_attraction, 
-                 avoidance_radius,
-                 formation_flying_radius, 
-                 speed_matching_strength,
-                 eagle_avoidance_radius=100, 
-                 eagle_fear=5000,
-                 eagle_hunt_strength=0.00005):
-        self.flock_attraction        = flock_attraction
-        self.avoidance_radius        = avoidance_radius
-        self.formation_flying_radius = formation_flying_radius
-        self.speed_matching_strength = speed_matching_strength
-        self.eagle_avoidance_radius  = eagle_avoidance_radius
-        self.eagle_fear              = eagle_fear
-        self.eagle_hunt_strength     = eagle_hunt_strength
+    def __init__(self):
+        self.flock_attraction        = None
+        self.avoidance_radius        = None
+        self.formation_flying_radius = None
+        self.speed_matching_strength = None
+        self.eagle_avoidance_radius  = 100
+        self.eagle_fear              = 5000
+        self.eagle_hunt_strength     = 0.00005
         self.boids                   = []
-
-
-    def initialise_random(self, count):
-        self.boids = [Starling(random.uniform(-450, 50.0),
-                      random.uniform(300.0, 600.0),
-                      random.uniform(0, 10.0),
-                      random.uniform(-20.0, 20.0), self) for _ in range(count)]
-
-    def add_eagle(self, x, y, xv, yv):
-        self.boids.append(Eagle(x, y, xv, yv, self))
-
-    def initialise_from_data(self, data):
-        self.boids = [Starling(x, y, xv, yv, self) for x, y, xv, yv in zip(*data)]
 
     def update(self):
         for me in self.boids:
@@ -106,4 +86,47 @@ class Boids(object):
             me.velocity += delta_v
             # Move according to velocities
             me.position += me.velocity
+
+
+class FlockBuilder(object):
+    def start_flock_setup(self):
+        self.flock = Boids()
+        self.flock.boids = []
+
+    def set_flock_attraction(self, flock_attraction):
+        self.flock.flock_attraction = flock_attraction
+
+    def set_avoidance_radius(self, avoidance_radius):
+        self.flock.avoidance_radius = avoidance_radius
+
+    def set_formation_flying_radius(self, formation_flying_radius):
+        self.flock.formation_flying_radius = formation_flying_radius
+
+    def set_speed_matching_strength(self, speed_matching_strength):
+        self.flock.speed_matching_strength = speed_matching_strength
+
+    def set_eagle_parameters(self, eagle_avoidance_radius=100, eagle_fear=5000, eagle_hunt_strength=0.00005):
+        self.flock.eagle_avoidance_radius = eagle_avoidance_radius
+        self.flock.eagle_fear = eagle_fear
+        self.flock.eagle_hunt_strength = eagle_hunt_strength
+
+    def add_Starling(self, x, y, xv, yv):
+        self.flock.boids.append(Starling(x, y, xv, yv, self.flock))
+
+    def add_Eagle(self, x, y, xv, yv):
+        self.flock.boids.append(Eagle(x, y, xv, yv, self.flock))
+
+    def initialise_random(self, count):
+        for _ in range(count):
+            self.add_Starling(random.uniform(-450, 50.0),
+                              random.uniform(300.0, 600.0),
+                              random.uniform(0, 10.0),
+                              random.uniform(-20., 20.))
+
+    def initialise_from_data(self, data):
+        for x, y, xv, yv in zip(*data):
+            self.add_Starling(x, y, xv, yv)
+
+    def create_flock(self):
+        return self.flock
 

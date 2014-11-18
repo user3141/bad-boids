@@ -1,14 +1,25 @@
+import boids
 from boids import Boids, Eagle
 from matplotlib import pyplot as plt
 from matplotlib import animation
 
-boids = Boids(flock_attraction = 0.01/50,
-              avoidance_radius = 10,
-              formation_flying_radius = 100,
-              speed_matching_strength = 0.125/50)
+flock_builder = boids.FlockBuilder()
+flock_builder.start_flock_setup()
+flock_builder.set_flock_attraction(0.01/50)
+flock_builder.set_avoidance_radius(10.)
+flock_builder.set_formation_flying_radius(100)
+flock_builder.set_speed_matching_strength(0.125/50)
+flock_builder.initialise_random(50)
+flock_builder.add_Eagle(0, 0, 0, 50)
+boids = flock_builder.create_flock()
 
-boids.initialise_random(50)
-boids.add_eagle(0, 0, 0, 50)
+#boids = Boids(flock_attraction = 0.01/50,
+#              avoidance_radius = 10,
+#              formation_flying_radius = 100,
+#              speed_matching_strength = 0.125/50)
+
+#boids.initialise_random(50)
+#boids.add_eagle(0, 0, 0, 50)
 
 figure = plt.figure()
 axes = plt.axes(xlim=(-2000, 1500), ylim=(-500, 4000))
