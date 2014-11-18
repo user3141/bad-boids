@@ -54,7 +54,7 @@ class Eagle(Boid):
         separation_sq = separation.dot(separation)
 
         if isinstance(other, Eagle):
-            # Flee the other Eagle(s)
+            # Avoid the other Eagle(s)
             if separation_sq < self.owner.eagle_avoidance_radius**2:
                 delta_v -= (separation * self.owner.eagle_fear) / separation.dot(separation)
                 return delta_v
@@ -67,18 +67,22 @@ class Eagle(Boid):
 
 # Deliberately terrible code for teaching purposes
 class Boids(object):
-    def __init__(self, flock_attraction, avoidance_radius,
-                 formation_flying_radius, speed_matching_strength,
-                 eagle_avoidance_radius=100, eagle_fear=5000,
+    def __init__(self, 
+                 flock_attraction, 
+                 avoidance_radius,
+                 formation_flying_radius, 
+                 speed_matching_strength,
+                 eagle_avoidance_radius=100, 
+                 eagle_fear=5000,
                  eagle_hunt_strength=0.00005):
-        self.flock_attraction = flock_attraction
-        self.avoidance_radius = avoidance_radius
+        self.flock_attraction        = flock_attraction
+        self.avoidance_radius        = avoidance_radius
         self.formation_flying_radius = formation_flying_radius
         self.speed_matching_strength = speed_matching_strength
-        self.eagle_avoidance_radius = eagle_avoidance_radius
-        self.eagle_fear = eagle_fear
-        self.eagle_hunt_strength = eagle_hunt_strength
-        self.boids = []
+        self.eagle_avoidance_radius  = eagle_avoidance_radius
+        self.eagle_fear              = eagle_fear
+        self.eagle_hunt_strength     = eagle_hunt_strength
+        self.boids                   = []
 
 
     def initialise_random(self, count):
