@@ -55,4 +55,6 @@ anim =  animation.FuncAnimation(figure, animate,
                                 frames=50, interval=50)
 
 if __name__ == "__main__":
-    plt.show()
+    #plt.show()
+    for i in range(500):
+        update_boids(boids)
