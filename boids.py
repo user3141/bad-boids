@@ -49,9 +49,8 @@ def update_boids(boids):
     yvs = yvs + np.sum(yvs_dist_matrix * (squared_dist_matrix < 10000), axis=1) * 0.125 / len(xs)
 
     # Move according to velocities
-    for i in range(len(xs)):
-        xs[i] = xs[i] + xvs[i]
-        ys[i] = ys[i] + yvs[i]
+    xs = xs + xvs
+    ys = ys + yvs
 
     boids[0] = xs
     boids[1] = ys
