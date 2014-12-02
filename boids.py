@@ -18,24 +18,36 @@ boids = [boids_x, boids_y, boid_x_velocities, boid_y_velocities]
 
 def update_boids(boids):
     xs, ys, xvs, yvs = boids
+
     # Fly towards the middle
     center_x = np.sum(xs) / len(xs)
     center_y = np.sum(ys) / len(ys)
     xvs = xvs + (center_x - xs) * 0.01
     yvs = yvs + (center_y - ys) * 0.01
+
     # Fly away from nearby boids
-    x_dist_matrix = xs[:, np.newaxis] - xs
-    y_dist_matrix = ys[:, np.newaxis] - ys
-    squared_dist_matrix = x_dist_matrix**2 + y_dist_matrix**2
-    xvs = xvs + np.sum(x_dist_matrix * (squared_dist_matrix < 100), axis=1)
-    yvs = yvs + np.sum(y_dist_matrix * (squared_dist_matrix < 100), axis=1)
+    #for i in range(len(xs)):
+    #    for j in range(len(xs)):
+    #        if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < 100:
+    #            xvs[i] = xvs[i] + (xs[i] - xs[j])
+    #            yvs[i] = yvs[i] + (ys[i] - ys[j])
+    xs_dist_matrix = xs[:, np.newaxis] - xs
+    ys_dist_matrix = ys[:, np.newaxis] - ys
+    squared_dist_matrix = xs_dist_matrix**2 + ys_dist_matrix**2
+    xvs = xvs + np.sum(xs_dist_matrix * (squared_dist_matrix < 100), axis=1)
+    yvs = yvs + np.sum(ys_dist_matrix * (squared_dist_matrix < 100), axis=1)
 
     # Try to match speed with nearby boids
-    for i in range(len(xs)):
-        for j in range(len(xs)):
-            if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < 10000:
-                xvs[i] = xvs[i] + (xvs[j] - xvs[i]) * 0.125 / len(xs)
-                yvs[i] = yvs[i] + (yvs[j] - yvs[i]) * 0.125 / len(xs)
+    #for i in range(len(xs)):
+    #    for j in range(len(xs)):
+    #        if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < 10000:
+    #            xvs[i] = xvs[i] + (xvs[j] - xvs[i]) * 0.125 / len(xs)
+    #            yvs[i] = yvs[i] + (yvs[j] - yvs[i]) * 0.125 / len(xs)
+    xvs_dist_matrix = xvs - xvs[:, np.newaxis]
+    yvs_dist_matrix = yvs - yvs[:, np.newaxis]
+    xvs = xvs + np.sum(xvs_dist_matrix * (squared_dist_matrix < 10000), axis=1) * 0.125 / len(xs)
+    yvs = yvs + np.sum(yvs_dist_matrix * (squared_dist_matrix < 10000), axis=1) * 0.125 / len(xs)
+
     # Move according to velocities
     for i in range(len(xs)):
         xs[i] = xs[i] + xvs[i]
