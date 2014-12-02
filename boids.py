@@ -19,12 +19,10 @@ boids = [boids_x, boids_y, boid_x_velocities, boid_y_velocities]
 def update_boids(boids):
     xs, ys, xvs, yvs = boids
     # Fly towards the middle
-    for i in range(len(xs)):
-        for j in range(len(xs)):
-            xvs[i] = xvs[i] + (xs[j] - xs[i]) * 0.01 / len(xs)
-    for i in range(len(xs)):
-        for j in range(len(xs)):
-            yvs[i] = yvs[i] + (ys[j] - ys[i]) * 0.01 / len(xs)
+    center_x = np.sum(xs) / len(xs)
+    center_y = np.sum(ys) / len(ys)
+    xvs = xvs + (center_x - xs) * 0.01
+    yvs = yvs + (center_y - ys) * 0.01
     # Fly away from nearby boids
     for i in range(len(xs)):
         for j in range(len(xs)):
@@ -41,6 +39,11 @@ def update_boids(boids):
     for i in range(len(xs)):
         xs[i] = xs [i] + xvs[i]
         ys[i] = ys [i] + yvs[i]
+
+    boids[0] = xs
+    boids[1] = ys
+    boids[2] = xvs
+    boids[3] = yvs
 
 figure = plt.figure()
 axes = plt.axes(xlim=(-500, 1500), ylim=(-500, 1500))
