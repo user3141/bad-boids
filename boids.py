@@ -24,11 +24,12 @@ def update_boids(boids):
     xvs = xvs + (center_x - xs) * 0.01
     yvs = yvs + (center_y - ys) * 0.01
     # Fly away from nearby boids
-    for i in range(len(xs)):
-        for j in range(len(xs)):
-            if (xs[j] - xs[i])**2 + (ys[j] - ys[i])**2 < 100:
-                xvs[i] = xvs[i] + (xs[i] - xs[j])
-                yvs[i] = yvs[i] + (ys[i] - ys[j])
+    x_dist_matrix = xs[:, np.newaxis] - xs
+    y_dist_matrix = ys[:, np.newaxis] - ys
+    squared_dist_matrix = x_dist_matrix**2 + y_dist_matrix**2
+    xvs = xvs + np.sum(x_dist_matrix * (squared_dist_matrix < 100), axis=1)
+    yvs = yvs + np.sum(y_dist_matrix * (squared_dist_matrix < 100), axis=1)
+
     # Try to match speed with nearby boids
     for i in range(len(xs)):
         for j in range(len(xs)):
@@ -37,8 +38,8 @@ def update_boids(boids):
                 yvs[i] = yvs[i] + (yvs[j] - yvs[i]) * 0.125 / len(xs)
     # Move according to velocities
     for i in range(len(xs)):
-        xs[i] = xs [i] + xvs[i]
-        ys[i] = ys [i] + yvs[i]
+        xs[i] = xs[i] + xvs[i]
+        ys[i] = ys[i] + yvs[i]
 
     boids[0] = xs
     boids[1] = ys
